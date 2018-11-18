@@ -26,3 +26,8 @@ Simple app to analyze `e-data` service's information in context of the Slatyne v
 ### Changelog
 
 0.1.0-a - Initial version
+
+##### Added:
+
+- 1.a - transactions e-data API data fetching;
+- 2 - row transactions list;
