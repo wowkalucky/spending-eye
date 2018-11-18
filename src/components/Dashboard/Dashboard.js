@@ -5,42 +5,48 @@ import {
   Grid, Paper, Table, TableHead, TableBody, TableRow, TableCell,
 } from '@material-ui/core';
 
+import {getTransactions} from '../../api/transactions';
+
 
 const styles = theme => ({
   root: {
     marginTop: theme.spacing.unit * 4,
+  },
+  date: {
+    width: theme.spacing.unit * 16,
   }
 });
 
 
 class Dashboard extends Component {
+  state = {
+    orderBy: 'amount_cop',
+    transactions: [],
+  };
+
+  componentDidMount() {
+    getTransactions()
+      .then(response => {
+        this.setState(state => ({
+          ...state,
+          transactions: response.data,
+        }))
+      })
+  }
 
   render() {
     const {classes} = this.props;
 
-    let id = 0;
-
-    function createData(trans_date, amount, recipt_name, recipt_edrpou, payment_details, category) {
-      id += 1;
-      return {id, trans_date, amount, recipt_name, recipt_edrpou, payment_details, category};
-    }
-
-    const rows = [
-      createData('2018-11-18', 100.00, 'Контрагент1', '01234567', 'За матеріали', 'Благоустрій'),
-      createData('2018-11-18', 200.00, 'Контрагент2', '01234567', 'За матеріали', 'Благоустрій'),
-      createData('2018-11-18', 300.00, 'Контрагент3', '01234567', 'За матеріали', 'Благоустрій'),
-      createData('2018-11-18', 400.00, 'Контрагент4', '01234567', 'За матеріали', 'Благоустрій'),
-      createData('2018-11-18', 500.00, 'Контрагент5', '01234567', 'За матеріали', 'Благоустрій'),
-    ];
+    const {orderBy, transactions} = this.state;
 
     return (
-      <Grid container className={classes.root} spacing={16} justify="center">
+      <Grid container className={classes.root} justify="center">
         <Grid item xs={10}>
           <Paper className={classes.paper}>
             <Table className={classes.table}>
               <TableHead>
                 <TableRow>
-                  <TableCell>Дата</TableCell>
+                  <TableCell className={classes.date}>Дата</TableCell>
                   <TableCell numeric>Сума</TableCell>
                   <TableCell>Одержувач</TableCell>
                   <TableCell>Код одержувача</TableCell>
@@ -49,15 +55,15 @@ class Dashboard extends Component {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map(row => {
+                {transactions.sort((a, b) => b[orderBy] - a[orderBy]).map(transaction => {
                   return (
-                    <TableRow key={row.id}>
-                      <TableCell component="th" scope="row">{row.trans_date}</TableCell>
-                      <TableCell numeric>{row.amount}</TableCell>
-                      <TableCell>{row.recipt_name}</TableCell>
-                      <TableCell>{row.recipt_edrpou}</TableCell>
-                      <TableCell>{row.payment_details}</TableCell>
-                      <TableCell>{row.category}</TableCell>
+                    <TableRow key={transaction.id}>
+                      <TableCell component="th" scope="row">{transaction.trans_date}</TableCell>
+                      <TableCell numeric>{transaction.amount}</TableCell>
+                      <TableCell>{transaction.recipt_name}</TableCell>
+                      <TableCell>{transaction.recipt_edrpou}</TableCell>
+                      <TableCell>{transaction.payment_details}</TableCell>
+                      <TableCell>{transaction.category}</TableCell>
                     </TableRow>
                   );
                 })}
