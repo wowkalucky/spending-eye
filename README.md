@@ -2,6 +2,22 @@
 
 Simple app to analyze `e-data` service's information in context of the Slatyne village self-governance purposes.
 
+### Spending Categories
+
+- Head Office:
+    - staff;
+        - payroll fund;
+        - taxes;
+    - utilities
+        - heating;
+        - electricity;
+    - equipment
+- Improvements:
+    - inner roads;
+    - streets lighting;
+- Culture:
+    - celebrations;
+
 ### Development Roadmap
 
 1) e-data API data fetching:
